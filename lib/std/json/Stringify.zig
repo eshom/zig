@@ -127,6 +127,7 @@ pub fn endObject(self: *Stringify) Error!void {
 fn pushIndentation(self: *Stringify, mode: IndentationMode) !void {
     switch (safety_checks) {
         .checked_to_fixed_depth => {
+            assert(self.indent_level < 256); // Reached output JSON maximum nesting depth.
             BitStack.pushWithStateAssumeCapacity(&self.nesting_stack, &self.indent_level, @intFromEnum(mode));
         },
         .assumed_correct => {
